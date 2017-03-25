@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.io as sio
 import os
+import datetime
 
 def VOCap(rec,prec):
     mrec = np.insert(rec,0,0); mrec= np.append(mrec,1)
@@ -13,10 +14,14 @@ def VOCap(rec,prec):
 
 
 
-def load_result_mat(result_dir):
+def load_result_mat(result_dir, bak_mat_dir):
+
     ret = {}
-    names = [os.path.join(result_dir,f) for f in os.listdir(result_dir)]
+    local_file = [f for f in os.listdir(result_dir)]
+    names = [os.path.join(result_dir,f) for f in local_file]
+    # bak_mat_path = [os.path.join(bak_mat_dir,f+now) for f in local_file]
     for n in names:
+        os.system("cp {} {}".format(n,bak_mat_dir))
         mat = sio.loadmat(n)
         pr = mat['pr_cruve']
         if 'easy' in n: ret['easy'] = [pr,str(mat['legend_name'][0])+'-easy']
@@ -25,9 +30,15 @@ def load_result_mat(result_dir):
     return ret
 
 
-def make_dirs():
-    single = './figures/single-result'
-    timeline = './figures/timeline-result'
+def make_dirs(mat_bak=False):
+    now = datetime.datetime.now().strftime("%H:%M:%S_%Y-%m-%d")
+    if mat_bak:
+        single = './mats/'+now
+        timeline = './mats/'+now
+    else:
+        single = './figures/single-result'
+        timeline = './figures/timeline-result'
+
     os.system('mkdir -p {}'.format(single))
     os.system('mkdir -p {}'.format(timeline))
     return single, timeline

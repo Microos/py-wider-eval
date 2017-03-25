@@ -21,6 +21,7 @@ def get_eval_result():
     import matlab.engine  # package install see: https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
     from mlabwrap import mlab  # package install see: http://mlabwrap.sourceforge.net/#installation
     # make sure 'matlab' executable is in your $PATH
+    single, _ = make_dirs(mat_bak=True)
     current_pwd = os.getcwd()
     print "Current location: ", current_pwd
     if not DEBUG: mlab.path(mlab.path(), eval_root)
@@ -29,7 +30,7 @@ def get_eval_result():
     if not DEBUG: mlab.my_wider_eval('./val')
     result_dir = os.path.join(os.getcwd(), 'plot/baselines/Val/setting_int/Ours')
     os.chdir(current_pwd)
-    D = load_result_mat(result_dir)
+    D = load_result_mat(result_dir,single)
     return D, current_pwd
     # D.keys():
         #['easy','medium','hard']

@@ -3,3 +3,6 @@
 *swp
 .idea
 .ipynb*
+*.mat
+figures
+mats
